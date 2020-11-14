@@ -2,6 +2,13 @@
 
 `ssl-gen` is a small CLI utility for generating and trusting SSL Certificates on macOS.
 
+Installation:
+
+```
+brew tap ashsmith/ssl-gen
+brew install ssl-gen
+```
+
 You can generate a certificate with multiple domains if you desire:
 
 ```
