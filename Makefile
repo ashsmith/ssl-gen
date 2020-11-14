@@ -8,7 +8,7 @@ GHRFLAGS =
 default: build
 
 build:
-	goxc -d=pkg -pv=$(VERSION) -bc="linux,windows,darwin,!386"
+	goxc -d=pkg -pv=$(VERSION)
 
 release:
 	ghr  -u ashsmith  $(GHRFLAGS) v$(VERSION) pkg/$(VERSION)

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"github.com/ttacon/chalk"
 )
 
 func init() {
@@ -49,12 +49,11 @@ var new = &cobra.Command{
 	Long:  "Generate a new certificate for multiple domains: new mycert mydomain.com myotherdomain.com",
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		yellow := color.New(color.FgYellow)
 
 		certName := args[0]
 		config := OpenSSLConfig{args[1:]}
 
-		yellow.Printf("Generating certificate called: %s with %s domains, will be saved to: %s\n", certName, args[1:], outputDir)
+		fmt.Printf(chalk.Yellow.Color("Generating certificate called: %s with %s domains, will be saved to: %s\n"), certName, args[1:], outputDir)
 		GenerateCert(outputDir, certName, config)
 
 	},
@@ -62,7 +61,6 @@ var new = &cobra.Command{
 
 // GenerateCert will generate a certificate.
 func GenerateCert(saveDir, certName string, config OpenSSLConfig) {
-	yellow := color.New(color.FgYellow)
 	var openSSLConf, err = template.New("openssl.conf").Parse(opensslConfTemplate)
 	if err != nil {
 		panic(err)
@@ -96,7 +94,7 @@ func GenerateCert(saveDir, certName string, config OpenSSLConfig) {
 	}
 	os.Remove("/tmp/openssl.conf")
 
-	yellow.Println("Adding the certificate into Keychain so it is trusted by your machine! [requires sudo]")
+	fmt.Println(chalk.Yellow.Color("Adding the certificate into Keychain so it is trusted by your machine! [requires sudo]"))
 
 	// Now we need to trust the certificate....
 	trustCert := exec.Command("sudo", "security", "add-trusted-cert", "-d", "-r", "trustRoot", "-k", "/Library/Keychains/System.keychain", certPath+".crt")
@@ -106,6 +104,5 @@ func GenerateCert(saveDir, certName string, config OpenSSLConfig) {
 	if trustErr != nil {
 		panic(trustErr)
 	}
-	success := color.New(color.Bold, color.FgGreen)
-	success.Println("All done! 🎉")
+	fmt.Println(chalk.Green.Color("All done! 🎉"))
 }
