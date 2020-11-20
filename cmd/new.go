@@ -80,7 +80,7 @@ func GenerateCert(saveDir, certName string, config OpenSSLConfig) {
 		panic(writeErr)
 	}
 
-	command := exec.Command("openssl", "req", "-x509", "-newkey", "rsa:2048", "-days", "3650", "-sha1", "-nodes",
+	command := exec.Command("openssl", "req", "-x509", "-newkey", "rsa:4096", "-days", "365", "-sha256", "-nodes",
 		"-keyout", certPath+".key",
 		"-out", certPath+".crt",
 		"-config", "/tmp/openssl.conf")
